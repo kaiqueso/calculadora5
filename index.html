@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculadora | JavaScript</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        
+        <style>
+            html {
+                font-size: 62.5%;
+                box-sizing: border-box;
+            }
+
+            .calculator {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 400px;
+            }
+
+            .calculatorScreen {
+                width: 100%;
+                height: 100px;
+                border: solid 0.1px;
+                background-color: white;
+                color: black;
+                text-align: right;
+                padding-right: 20px;
+                padding-left: 10px;
+                font-size: 4rem;
+            }
+
+            .btn {
+                height: 60px;
+                border: solid 0.5px;
+                border-radius: 5px;
+                font-size: 2rem!important;
+            }
+
+            /* .zero {
+                grid-area: 6 / 1 / 6 / 3;
+            } */
+
+            .equal-sign {
+                /* height: 100%; */
+                grid-area: 7 / 1 / 7 / 6;
+            }
+
+            .calculator-keys {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                grid-gap: 3px;
+                padding-top: 4px;
+            }
+        </style>
+
+        <script>
+            var memory = 0
+            let estado = false
+
+            function mem(c) {
+                //MC Apaga a memória
+                if (c == 0) {
+                    memory = 0;
+                }
+                //MR mostra o valor na memória
+                if (c == 1) {
+                    document.form.calculatorScreen.value = memory ;
+                }
+                //MS Adiciona a memória
+                if (c == 2) {
+                    memory = document.form.calculatorScreen.value
+                    clean()                   
+                }
+                //M+ Soma a tela com a memoria e coloca na memoria
+                if (c == 3) {
+                    x = memory + '+' + document.form.calculatorScreen.value
+                    memory = equal(x)
+                }
+                //M- Subtrai o valor da memoria pelo da tela
+                if (c == 4) {
+                    x = memory + '-' + document.form.calculatorScreen.value
+                    memory = equal(x)
+                }
+            }
+
+            function square() {
+                document.form.calculatorScreen.value = Math.pow((document.form.calculatorScreen.value), 2)
+                estado = true
+            }
+
+            function cube() {
+                document.form.calculatorScreen.value = Math.pow((document.form.calculatorScreen.value), 3)
+                estado = true
+            }
+
+            function log() {
+                document.form.calculatorScreen.value = Math.log(document.form.calculatorScreen.value);
+                estado = true
+            }
+
+            function insertNumber(num){
+                if(estado)
+                    clean()
+                
+                estado = false
+                document.form.calculatorScreen.value = document.form.calculatorScreen.value + num
+            }
+
+            function equal(x) {
+                if(x) {
+                    screenValue = x
+                } else {
+                    screenValue = document.form.calculatorScreen.value
+                }
+
+                if(screenValue){
+                   document.form.calculatorScreen.value = eval(screenValue)
+            	}
+
+                estado = true
+            }
+
+            function backspace() {
+                let screenValue = document.form.calculatorScreen.value
+                document.form.calculatorScreen.value = screenValue.substring(0, screenValue.length-1)
+            }
+
+            function clean(){
+                document.form.calculatorScreen.value = ""
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container my-4">
+            <div class="calculator card">
+                <form name='form'>
+                    <input class="calculatorScreen z-depth-1" name='calculatorScreen' disabled>
+                </form>
+
+                <div class="calculator-keys">
+                    <input type="button" class="btn btn-info" value="MC" onclick="mem(0)">
+                    <input type="button" class="btn btn-info" value="MR" onclick="mem(1)">
+                    <input type="button" class="btn btn-info" value="MS" onclick="mem(2)">
+                    <input type="button" class="btn btn-info" value="M+" onclick="mem(3)">
+                    <input type="button" class="btn btn-info" value="M-" onclick="mem(4)">
+
+                    <input type="button" class="btn btn-danger btn-sm" value="&LeftArrow;" onclick="backspace()">
+                    <input type="button" class="btn btn-danger btn-sm" value="CE">
+                    <input type="button" class="btn btn-danger btn-sm" value="C" onclick="clean()">
+                    <input type="button" class="btn btn-primary" value="&plusmn;">
+                    <input type="button" class="btn btn-primary" value="&radic;">
+
+                    <input type="button" value="7" class="btn btn-light" onclick="insertNumber(7)">
+                    <input type="button" value="8" class="btn btn-light" onclick="insertNumber(8)">
+                    <input type="button" value="9" class="btn btn-light" onclick="insertNumber(9)">
+                    <input type="button" class="btn btn-primary" value="&divide;" onclick="insertNumber('/')">
+                    <input type="button" class="btn btn-primary" value="&percnt;" onclick="insertNumber('%')">
+
+                    <input type="button" value="4" class="btn btn-light" onclick="insertNumber(4)">
+                    <input type="button" value="5" class="btn btn-light" onclick="insertNumber(5)">
+                    <input type="button" value="6" class="btn btn-light" onclick="insertNumber(6)">
+                    <input type="button" class="btn btn-primary" value="&#215;" onclick="insertNumber('*')">
+                    <input type="button" class="btn btn-primary" value="1/x">
+
+                    <input type="button" value="1" class="btn btn-light" onclick="insertNumber(1)">
+                    <input type="button" value="2" class="btn btn-light" onclick="insertNumber(2)">
+                    <input type="button" value="3" class="btn btn-light" onclick="insertNumber(3)">
+                    <input type="button" class="btn btn-primary" value="-" onclick="insertNumber('-')">
+                    <input type="button" class="btn btn-primary" value="x²" onclick="square()">
+
+                    <input type="button" value="0" class="zero btn btn-light" onclick="insertNumber(0)">
+                    <input type="button" class="btn btn-light" value="." onclick="insertNumber('.')">
+                    <input type="button" class="btn btn-primary" value="+" onclick="insertNumber('+')">
+                    <input type="button" class="btn btn-primary" value="x³" onclick="cube()">
+                    <input type="button" class="btn btn-primary" value="log" onclick="log()">
+                    <input type="button" class="equal-sign btn btn-success" value="=" onclick="equal()">
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
